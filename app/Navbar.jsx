@@ -39,7 +39,18 @@ const Navbar = ({children}) => {
     <div className="relative min-h-screen md:flex">
       <div className="bg-gray-800 text-gray-100 flex justify-between md:hidden">
         <a href="#" className="block p-4 text-white font-bold">
-          iHutang
+          <Flex align={"center"} gap={"2"}>
+            <Image
+              priority
+              src={logoApps}
+              alt="syukrandev apps"
+              height={20}
+              width={20}
+
+            />
+            track.me
+
+          </Flex>
         </a>
         <button
           onClick={toggleSidebar}
@@ -78,7 +89,7 @@ const Navbar = ({children}) => {
           <span className="text-2xl font-extrabold">track.me</span>
         </a>
 
-        <nav className='pl-4'>
+        <nav className=''>
           <Link
             href="/"
             className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white"

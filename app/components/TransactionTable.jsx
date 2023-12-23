@@ -10,7 +10,8 @@ const TransactionTable = ({contents, isDelete}) => {
         <Table.Root variant="surface" className="shadow-sm">
                         <Table.Header>
                             <Table.Row>
-                            <Table.ColumnHeaderCell>ID</Table.ColumnHeaderCell>
+                            {/* <Table.ColumnHeaderCell>ID</Table.ColumnHeaderCell> */}
+                            <Table.ColumnHeaderCell>Name</Table.ColumnHeaderCell>
                             <Table.ColumnHeaderCell>Description</Table.ColumnHeaderCell>
                             <Table.ColumnHeaderCell>Transaction Type</Table.ColumnHeaderCell>
                             <Table.ColumnHeaderCell>Total (in RM)</Table.ColumnHeaderCell>
@@ -23,7 +24,8 @@ const TransactionTable = ({contents, isDelete}) => {
                         <Table.Body>
                         {contents.map(transaction => (
                                     <Table.Row key={transaction.id}>
-                                        <Table.RowHeaderCell>{transaction.id}</Table.RowHeaderCell>
+                                        {/* <Table.RowHeaderCell>{transaction.id}</Table.RowHeaderCell> */}
+                                        <Table.Cell>{transaction.name}</Table.Cell>
                                         <Table.Cell>{transaction.desc}</Table.Cell>
                                         <Table.Cell><Badge color="orange">{transaction.type}</Badge></Table.Cell>
                                         <Table.Cell>{transaction.total_amt}</Table.Cell>
