@@ -1,7 +1,8 @@
 
 
 ## Tech Stack
-UI - NextJS, React Query, React Hot Toast, React Icons<br>
+UI Framework- NextJS<br>
+UI Component Library - RadixUI, React Hot Toast, React Icons<br>
 Backend - Otw<br>
 
 Note: Still in development phase both UI and backend.
