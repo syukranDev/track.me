@@ -6,7 +6,7 @@ const DeleteTransaction = ({row}) => {
     return (
         <AlertDialog.Root>
             <AlertDialog.Trigger>
-                <FiTrash2 size={"15"} color='red' className="m-auto hover:cursor-pointer"/>
+                <FiTrash2 size={"15"} color='red' className="m-auto hover:cursor-pointer transition duration-300 ease-in-out hover:scale-125"/>
             </AlertDialog.Trigger>
             <AlertDialog.Content style={{ maxWidth: 450 }}>
                 <AlertDialog.Title>Delete a transaction</AlertDialog.Title>

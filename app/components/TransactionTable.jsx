@@ -25,15 +25,15 @@ const TransactionTable = ({contents, isDelete}) => {
                         {contents.map(transaction => (
                                     <Table.Row key={transaction.id}>
                                         {/* <Table.RowHeaderCell>{transaction.id}</Table.RowHeaderCell> */}
-                                        <Table.Cell>{transaction.name}</Table.Cell>
-                                        <Table.Cell>{transaction.desc}</Table.Cell>
+                                        <Table.Cell>{(transaction?.name)}</Table.Cell>
+                                        <Table.Cell>{(transaction?.desc).substring(0, 20).concat('...')}</Table.Cell>
                                         <Table.Cell><Badge color="orange">{transaction.type}</Badge></Table.Cell>
                                         <Table.Cell>{transaction.total_amt}</Table.Cell>
                                         <Table.Cell>{transaction.categories}</Table.Cell>
                                         <Table.Cell>
-                                            { transaction.status == 'approved' 
-                                            ? ( <Badge color="green">Approved</Badge>) 
-                                            : ( <Badge color="orange">Pending</Badge>)
+                                            { transaction.status == 'settled' 
+                                            ? ( <Badge color="green">Settled</Badge>) 
+                                            : ( <Badge color="red">In Debt</Badge>)
                                             }
 
                                         </Table.Cell>

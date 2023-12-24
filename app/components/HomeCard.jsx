@@ -7,7 +7,7 @@ import { GrDocumentPdf } from "react-icons/gr";
 import TransactionTable from "../components/TransactionTable";
 import { useState, useEffect } from 'react';
 import axios from 'axios'
-
+import Announcement from '../components/Announcement'
 const fileUploadedList = [
     {
         id: 1,
@@ -42,7 +42,10 @@ const HomeCard = () => {
         }, []);
 
     return (
-        <Container className="m-10">
+        <Container className="m-8">
+            <Box className='mb-5'>
+                <Announcement/>
+            </Box>
             <Grid columns={{initial: "1", md: "3"}} width="auto" gap="5">
                 <Box>
                     <Card className='shadow-sm transition duration-700 ease-out hover:border-gray-600 hover:shadow-md' gap={3}  style={{ height: '100%' }}>
@@ -137,7 +140,7 @@ const HomeCard = () => {
                         <a href="#">
                             <Flex align={'center'} justify={'between'} className='mb-3'>
                             <span className='font-medium text-base'>
-                                        Average Spending
+                                        Total In-debt
                                     </span>
                             {/* <Button>
                             Add Transaction
@@ -146,12 +149,12 @@ const HomeCard = () => {
                             </Flex>
                             <Text as="div" size="8">
                                 <span>RM
-                                    <CountUp start={100} end={145} duration={1} className='' />
-                                    <Badge color="green" className='ml-2'>+2%</Badge>
+                                    <CountUp start={100} end={32} duration={1} className='' />
+                                    <Badge color="red" className='ml-2'>-4%</Badge>
                                 </span>
                             </Text>
                             <Text as="div" color="gray" size="2">
-                            per weekly basis
+                            from last month
                             </Text>
                         </a>
                     </Card>

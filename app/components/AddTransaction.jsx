@@ -4,21 +4,75 @@ import delay from 'delay'
 import Spinner from "../components/Spinner"
 import {RadioGroup, Switch, TextArea, Select, Dialog, Flex, Text, TextField, Button} from "@radix-ui/themes"
 import toast, { Toaster } from 'react-hot-toast'
+import axios from 'axios'
 
-const AddTransaction = () => {
+const AddTransaction = ({updateTableDataAfterAddNewTransaction}) => {
+    const initialFormData = {
+        name: '',
+        desc: '',
+        total_amt: '',
+        type: 'local',
+        categories: '',
+        payment_method: '',
+        status: false
+    }
+    
+    const [formData, setFormData] = useState(initialFormData);
+
     const [isSubmitting, setSubmitting] = useState(false)
 
-    const addNewTransaction = async () => {
-        try {
-            setSubmitting(true)
+    const handleInputChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        console.log({ name, value, type, checked})
+        const val = type === 'checkbox' ? checked : value;
+        setFormData((prevData) => ({ ...prevData, [name]: val }));
+    };
 
-            await delay(1000)
-            setSubmitting(false)
-            toast.success('Successfully added new transaction!')
+    const handleSelectChange = (selectedOption, name) => {
+        setFormData((prevData) => ({ ...prevData, [name]: selectedOption }));
+    };
 
-        } catch (error) {
-            setSubmitting(false)
-        }
+    const handleTransactionTypeChange = (value) => {
+        setFormData((prevData) => ({ ...prevData, type: value }));
+    };
+
+     const [isSwitchChecked, setIsSwitchChecked] = useState(false);
+
+    const handleIsDebtChange = () => {
+       setIsSwitchChecked((prevState) => !prevState);
+       setFormData((prevData) => ({ ...prevData, status: !isSwitchChecked }));
+    };
+
+    const isFormValid = () => {
+    return (
+      formData.name.trim() !== '' &&
+      formData.desc.trim() !== '' &&
+      formData.total_amt.trim() !== '' &&
+      formData.categories !== '' &&
+      formData.payment_method !== ''
+    );
+  };
+
+    const addNewTransaction = async (e) => {
+        setSubmitting(true)
+        await delay(1000) //to simulate loading, better UX
+
+        console.log(formData)
+        await axios.post('http://localhost:3003/api/transaction/add', formData)
+            .then(res => {
+                console.log(res)
+                toast.success('Successfully added new transaction!')
+                setSubmitting(false)
+                updateTableDataAfterAddNewTransaction();
+
+                //reset form
+                 setFormData(initialFormData);
+            })
+            .catch(err => {
+                console.log(err.message)
+                    toast.error('Something went wrong!')
+                    setSubmitting(false)
+            })
     }
 
     return (
@@ -37,26 +91,39 @@ const AddTransaction = () => {
                     <Flex direction="column" gap="3">
                         <label>
                             <Text as="div" size="2" mb="1" weight="bold">
-                            Name
+                            Name*
                             </Text>
                             <TextField.Input
-                            placeholder="Enter transaction name"
+                                placeholder="Enter transaction name"
+                                name='name'
+                                value={formData.name}
+                                onChange={handleInputChange}
+                                maxLength={"30"}
                             />
                         </label>
 
                         <label>
                             <Text as="div" size="2" mb="1" weight="bold">
-                            Description
+                            Description*
                             </Text>
-                            <TextArea placeholder="Enter transaction description" />
+                            <TextArea 
+                                placeholder="Enter transaction description" 
+                                name='desc'
+                                value={formData.desc}
+                                onChange={handleInputChange}
+                            />
                         </label>
 
                         <label>
                             <Text as="div" size="2" mb="1" weight="bold">
-                            Total Amount
+                            Total Amount*
                             </Text>
                             <TextField.Input
-                            placeholder="Enter amount"
+                                placeholder="Enter amount"
+                                name='total_amt'
+                                value={formData.total_amt}
+                                onChange={handleInputChange}
+                                type='number'
                             />
                         </label>
 
@@ -64,10 +131,10 @@ const AddTransaction = () => {
                             <Text as="div" size="2" mb="1" weight="bold">
                             Transaction Type
                             </Text>
-                            <RadioGroup.Root size="2" defaultValue="local">
+                            <RadioGroup.Root size="2"  value={formData.type} onValueChange={handleTransactionTypeChange}>
                                 <Flex  gap="2">
                                     <Text as="label" size="2">
-                                        <RadioGroup.Item value="local" /> Local
+                                        <RadioGroup.Item value="local"/> Local
                                     </Text>
                                     <Text as="label" size="2">
                                         <RadioGroup.Item value="overseas" /> Overseas
@@ -80,7 +147,7 @@ const AddTransaction = () => {
                             <Text as="div" size="2" mb="1" weight="bold">
                             Categories
                             </Text>
-                            <Select.Root>
+                            <Select.Root onValueChange={(value) => handleSelectChange(value, 'categories')}>
                                 <Select.Trigger placeholder="Choose category"/>
                                 <Select.Content position="popper">
                                     <Select.Group>
@@ -90,7 +157,7 @@ const AddTransaction = () => {
                                         <Select.Item value="groceries">Groceries</Select.Item>
                                         <Select.Item value="dining">Dining</Select.Item>
                                         <Select.Item value="electronics">Electronics</Select.Item>
-                                        <Select.Item value="entertainment">Entertainment</Select.Item>
+                                        <Select.Item value="entertainment" >Entertainment</Select.Item>
                                         <Select.Item value="subscriptions">Subscriptions</Select.Item>
                                         <Select.Item value="clothing">Clothing</Select.Item>
                                         <Select.Item value="utilities">Utilities</Select.Item>
@@ -102,9 +169,9 @@ const AddTransaction = () => {
                     
                         <label>
                             <Text as="div" size="2" mb="1" weight="bold">
-                            Payment Type
+                            Payment Method
                             </Text>
-                            <Select.Root>
+                            <Select.Root onValueChange={(value) => handleSelectChange(value, 'payment_method')}>
                                 <Select.Trigger placeholder="Choose category"/>
                                 <Select.Content position="popper">
                                     <Select.Group>
@@ -118,11 +185,11 @@ const AddTransaction = () => {
 
                         <label>
                             <Text as="div" size="2" mb="1" weight="bold">
-                            Status
+                            Is this debt ?
                             </Text>
                             <Text as="label" size="2">
                             <Flex gap="2">
-                                <Switch defaultChecked /> Approved
+                                <Switch defaultChecked={isSwitchChecked} onChange={handleIsDebtChange}  /> 
                             </Flex>
                             </Text>
                         </label>
@@ -136,7 +203,7 @@ const AddTransaction = () => {
                         </Button>
                     </Dialog.Close>
                     <Dialog.Close>
-                        <Button onClick={addNewTransaction}>Add</Button>
+                        <Button onClick={addNewTransaction} disabled={!isFormValid()}>Add</Button>
                     </Dialog.Close>
                     </Flex>
                 </Dialog.Content>
