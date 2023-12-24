@@ -1,9 +1,11 @@
 
+## Objective
+Just to test new UI component by RadixUI
 
-## Tech Stack
+## Tech Stack Used
 UI Framework- NextJS<br>
 UI Component Library - RadixUI, React Hot Toast, React Icons<br>
-Backend - Otw<br>
+Backend - NodeJS, PostgreSQL, Sequelieze ORM
 
 Note: Still in development phase both UI and backend.
 
