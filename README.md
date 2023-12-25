@@ -3,7 +3,7 @@
 Just to test new UI component by RadixUI
 
 ## Tech Stack Used
-UI Framework- NextJS<br>
+UI Framework- NextJS, Tailwind CSS<br>
 UI Component Library - RadixUI, React Hot Toast, React Icons<br>
 Backend - NodeJS, PostgreSQL, Sequelieze ORM
 
