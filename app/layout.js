@@ -11,7 +11,7 @@ const inter = Inter({
  })
 
 export const metadata = {
-  title: 'track.me',
+  title: 'trackwallet.me',
   description: 'Personalized finance managenement',
 }
 

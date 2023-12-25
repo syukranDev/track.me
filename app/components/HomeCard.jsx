@@ -41,7 +41,7 @@ const HomeCard = () => {
         }, []);
 
     return (
-        <Container className="m-8">
+        <>
             <Box className='mb-5'>
                 <Announcement/>
             </Box>
@@ -173,9 +173,7 @@ const HomeCard = () => {
                     
                     <TransactionTable contents={data}/>
             </Box>
-
-            
-        </Container>
+        </>
     )
 }
 
