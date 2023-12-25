@@ -40,7 +40,7 @@ const TransactionTable = ({contents, isDelete}) => {
                                         <Table.Cell>{transaction.upload_date}</Table.Cell>
                                         { isDelete === true && (
                                             <Table.Cell>
-                                                    <DeleteTransaction row={transaction.id}/>
+                                                    <DeleteTransaction rowId={transaction.id}/>
                                             </Table.Cell>
                                         )}
                                     </Table.Row>

@@ -2,7 +2,7 @@
 import React, {useState} from 'react'
 import delay from 'delay'
 import Spinner from "../components/Spinner"
-import {RadioGroup, Switch, TextArea, Select, Dialog, Flex, Text, TextField, Button} from "@radix-ui/themes"
+import {RadioGroup, TextArea, Select, Dialog, Flex, Text, TextField, Button, Switch} from "@radix-ui/themes"
 import toast, { Toaster } from 'react-hot-toast'
 import axios from 'axios'
 
@@ -23,7 +23,6 @@ const AddTransaction = ({updateTableDataAfterAddNewTransaction}) => {
 
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
-        console.log({ name, value, type, checked})
         const val = type === 'checkbox' ? checked : value;
         setFormData((prevData) => ({ ...prevData, [name]: val }));
     };
@@ -36,11 +35,12 @@ const AddTransaction = ({updateTableDataAfterAddNewTransaction}) => {
         setFormData((prevData) => ({ ...prevData, type: value }));
     };
 
-     const [isSwitchChecked, setIsSwitchChecked] = useState(false);
+     const [checked, setChecked] = useState(false);
 
-    const handleIsDebtChange = () => {
-       setIsSwitchChecked((prevState) => !prevState);
-       setFormData((prevData) => ({ ...prevData, status: !isSwitchChecked }));
+    const handleSwitchToggle = () => {
+        const newValue = !checked;
+        setChecked(newValue);
+        setFormData((prevData) => ({ ...prevData, status: newValue }));
     };
 
     const isFormValid = () => {
@@ -69,7 +69,7 @@ const AddTransaction = ({updateTableDataAfterAddNewTransaction}) => {
                  setFormData(initialFormData);
             })
             .catch(err => {
-                console.log(err.message)
+                console.log(err)
                     toast.error('Something went wrong!')
                     setSubmitting(false)
             })
@@ -189,7 +189,7 @@ const AddTransaction = ({updateTableDataAfterAddNewTransaction}) => {
                             </Text>
                             <Text as="label" size="2">
                             <Flex gap="2">
-                                <Switch defaultChecked={isSwitchChecked} onChange={handleIsDebtChange}  /> 
+                                 <Switch checked={checked} onCheckedChange={handleSwitchToggle} /> 
                             </Flex>
                             </Text>
                         </label>

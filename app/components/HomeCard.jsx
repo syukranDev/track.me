@@ -29,13 +29,12 @@ const HomeCard = () => {
     
     useEffect(() => {
             const fetchData = async () => {
-            try {
-                const response = await axios.get('http://localhost:3003/api/transaction/list?page=1&limit_rows=3'); // Replace with your API endpoint
-                console.log(response.data.data.rows)
-                setData(response.data.data.rows)
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
+                try {
+                    const response = await axios.get('http://localhost:3003/api/transaction/list?page=1&limit_rows=4'); // Replace with your API endpoint
+                    setData(response.data.data.rows)
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
             };
     
             fetchData();

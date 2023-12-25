@@ -45,7 +45,7 @@ router.post('/add', async (req, res) => {
     if (!type) return res.status(422).send({errMsg: 'Missing type'})
     if (!payment_method) return res.status(422).send({errMsg: 'Missing payment_method'})
     if (!total_amt) return res.status(422).send({errMsg: 'Missing total_amt'})
-    if (!status) return res.status(422).send({errMsg: 'Missing status'})
+    // if (!status) return res.status(422).send({errMsg: 'Missing status'})
     // if (!upload_date) return res.status(422).send({errMsg: 'Missing upload_date'})
     // if (!assignedToUserId) return res.status(422).send({errMsg: 'Missing assignedToUserId'})
     if (!name) return res.status(422).send({errMsg: 'Missing name'})
@@ -74,6 +74,33 @@ router.post('/add', async (req, res) => {
     res.send({
         status: 200,
         message: 'Succesfully added new transaction'
+    })
+})
+
+router.get('/delete/:id', async (req, res) => {
+    let { id } = req.params
+
+    if (!id) return res.status(422).send({errMsg: 'Missing id'})
+
+    try {
+      isRowExist = await db.transactions.findAll({
+        where: {id}
+      })
+
+      if (isRowExist.length < 1) return res.status(422).send({errMsg: 'ID provided not exist.'})
+
+      await db.transactions.destroy({
+        where: { id }
+      });
+      
+    } catch (err){
+      console.error(err)
+      return res.status(500).send({errMsg: 'Failed to delete transaction'})
+    }
+
+    return res.send({
+        status: 200,
+        message: 'Succesfully deleted transaction'
     })
 })
 
