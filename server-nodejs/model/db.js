@@ -27,6 +27,7 @@ db.sequelize = sequelize;
 
 // public schema
 db.transactions = require('./transactions.js')(sequelize, Sequelize);
+db.receipts = require('./receipts.js')(sequelize, Sequelize);
 
 sequelize.sync();
 

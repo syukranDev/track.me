@@ -104,4 +104,48 @@ router.get('/delete/:id', async (req, res) => {
     })
 })
 
+router.get('/dashboard', async (req, res) => {
+  let data;
+  let dashboard = {}
+
+  try {
+    data = await db.transactions.findAndCountAll({
+      raw: true,
+      logging: console.log
+    });
+
+    in_debt_data = await db.transactions.findAndCountAll({
+      where: { status: 'in debt' },
+      raw: true,
+      logging: console.log
+    });
+
+    receipt_data = await db.receipts.findAndCountAll({
+      order: [['createdAt', 'DESC']],
+      limit: 3,
+      raw: true,
+      logging: console.log
+    });
+
+  
+    dashboard.total_transactions = data.count
+    dashboard.total_spending =  (data.rows).reduce((acc, row) => acc + row.total_amt, 0);
+    dashboard.average_spending  = parseFloat((dashboard.total_spending / dashboard.total_transactions).toFixed(2));
+    dashboard.total_in_debt = (in_debt_data.rows).reduce((acc, row) => acc + row.total_amt, 0);
+    dashboard.receipts = 
+      (receipt_data.rows).map(({ id, filename, image_data, file_ext }) => ({
+        id,
+        filename,
+        image_data,
+        file_ext
+      }));
+
+  } catch (err) {
+    console.error(err)
+    return res.status(500).send({errMsg: 'Unable to fetch dashboard data'})
+  }
+
+  return res.send({ status: 200, dashboard })
+})
+
 module.exports = router
