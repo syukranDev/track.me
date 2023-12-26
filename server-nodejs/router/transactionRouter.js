@@ -146,11 +146,12 @@ router.get('/dashboard', async (req, res) => {
     dashboard.average_spending  = parseFloat((dashboard.total_spending / dashboard.total_transactions).toFixed(2));
     dashboard.total_in_debt = (in_debt_data.rows).reduce((acc, row) => acc + row.total_amt, 0);
     dashboard.receipts = 
-      (receipt_data.rows).map(({ id, filename, image_data, file_ext }) => ({
+      (receipt_data.rows).map(({ id, filename, image_data, file_ext, alt_direct_link }) => ({
         id,
         filename,
         image_data,
-        file_ext
+        file_ext,
+        alt_direct_link
       }));
 
   } catch (err) {

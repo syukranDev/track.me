@@ -8,7 +8,7 @@ import axios from 'axios'
 import { UploadDropzone } from "@bytescale/upload-widget-react";
 
 const options = {
-  apiKey: "public_W142iPQ2tU7qmPDBPRGvNypWCzLC", // Get API keys from: www.bytescale.com
+  apiKey: process.env.NEXT_PUBLIC_BYTESCALE_PHOTO_UPLOAD, // Get API keys from: www.bytescale.com
   maxFileCount: 1,
   styles: {
     colors: {

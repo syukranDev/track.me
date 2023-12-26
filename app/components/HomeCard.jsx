@@ -76,28 +76,26 @@ const HomeCard = () => {
                 </Box>
                 <Box height={{initial: "", md: "3"}}>
                     <Card className='shadow-sm transition duration-700 ease-out hover:border-gray-600 hover:shadow-md' gap={3} >
-                        <a href="#">
-                            <Flex align='center' justify={'between'} className='mb-3'>
-                                <Text size="3" weight="medium">Recent Receipts ({fileUploadedList.length})</Text>
-                            </Flex>
+                        <Flex align='center' justify={'between'} className='mb-3'>
+                            <Text size="3" weight="medium">Recent Receipts ({fileUploadedList.length})</Text>
+                        </Flex>
 
-                            <Separator my="3" size="4" />
-                            {(fileUploadedList).map(receipt => (
-                                <Box key={receipt.id} as="div"  size="2" className='mb-2'>
-                                    <Flex align={'center'}>
-                                        <BsFiletypeJpg
-                                            size={35}
-                                            color={'gray'} 
-                                            className='items-center mr-2'
-                                        />
-                                        <Box>
-                                            <Text  as="div"  size="2" className='font-medium'>{receipt.filename + '.' + receipt.file_ext}  </Text>
-                                            <Badge color="green" className='' size='1'>Uploaded</Badge>
-                                        </Box>
-                                    </Flex>
-                                </Box>
-                            ))}
-                        </a>
+                        <Separator my="3" size="4" />
+                        {(fileUploadedList).map(receipt => (
+                            <Box key={receipt.id} as="div"  size="2" className='mb-2'>
+                                <Flex align={'center'}>
+                                    <BsFiletypeJpg
+                                        size={35}
+                                        color={'gray'} 
+                                        className='items-center mr-2'
+                                    />
+                                    <Box>
+                                        <Link target='_blank' href={receipt.alt_direct_link}><Text  as="div"  size="2" className='font-medium'>{receipt.filename + '.' + receipt.file_ext}</Text></Link>
+                                        <Badge color="green" className='' size='1'>Uploaded</Badge>
+                                    </Box>
+                                </Flex>
+                            </Box>
+                        ))}
                     </Card>
                 </Box>
                 <Box>
