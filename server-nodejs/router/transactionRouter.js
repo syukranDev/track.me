@@ -38,7 +38,8 @@ router.post('/add', async (req, res) => {
       upload_date, 
       assignedToUserId,
       name, 
-      categories
+      categories,
+      file_uploaded
     } = req.body
 
     if (!desc) return res.status(422).send({errMsg: 'Missing desc'})
@@ -50,10 +51,12 @@ router.post('/add', async (req, res) => {
     // if (!assignedToUserId) return res.status(422).send({errMsg: 'Missing assignedToUserId'})
     if (!name) return res.status(422).send({errMsg: 'Missing name'})
     if (!categories) return res.status(422).send({errMsg: 'Missing categories'})
+    if (!file_uploaded) return res.status(422).send({errMsg: 'Missing alt_direct_link'})
 
+    let transactions_uuid = uuid()
     try {
       await db.transactions.create({
-          "id": uuid() ,
+          "id": transactions_uuid ,
           "name": name,
           "desc": desc || '',
           "total_amt": total_amt || 0,
@@ -63,6 +66,16 @@ router.post('/add', async (req, res) => {
           "status": status == false ? 'settled' : 'in debt',
           "upload_date": upload_date || today,
           "assignedToUserId": assignedToUserId || 'poweruser'
+      });
+
+      await db.receipts.create({
+          "id": uuid(),
+          "transaction_id": transactions_uuid,
+          "filename": file_uploaded.filename || '', 
+          "image": Buffer.alloc(0), //empty for now
+          "assignedToUserId": assignedToUserId || 'poweruser',
+          "file_ext": 'jpg',
+          "alt_direct_link": file_uploaded.ext_direct_link || '' ,
       });
 
     } catch (err){

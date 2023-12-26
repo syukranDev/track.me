@@ -5,6 +5,24 @@ import Spinner from "../components/Spinner"
 import {RadioGroup, TextArea, Select, Dialog, Flex, Text, TextField, Button, Switch} from "@radix-ui/themes"
 import toast, { Toaster } from 'react-hot-toast'
 import axios from 'axios'
+import { UploadDropzone } from "@bytescale/upload-widget-react";
+
+const options = {
+  apiKey: "public_W142iPQ2tU7qmPDBPRGvNypWCzLC", // Get API keys from: www.bytescale.com
+  maxFileCount: 1,
+  styles: {
+    colors: {
+      primary: "#6E56CF",   
+    }
+  },
+  editor: {
+      images: {
+        allowResizeOnMove: false,   
+        preview: false,              
+        crop: false, 
+      }
+  }
+};
 
 const AddTransaction = ({updateTableDataAfterAddNewTransaction}) => {
     const initialFormData = {
@@ -14,7 +32,8 @@ const AddTransaction = ({updateTableDataAfterAddNewTransaction}) => {
         type: 'local',
         categories: '',
         payment_method: '',
-        status: false
+        status: false,
+        file_uploaded: { ext_direct_link: '', filename: ''}
     }
     
     const [formData, setFormData] = useState(initialFormData);
@@ -49,7 +68,9 @@ const AddTransaction = ({updateTableDataAfterAddNewTransaction}) => {
       formData.desc.trim() !== '' &&
       formData.total_amt.trim() !== '' &&
       formData.categories !== '' &&
-      formData.payment_method !== ''
+      formData.payment_method !== '' 
+    //   formData.file_uploaded.ext_direct_link !== '' &&
+    //   formData.file_uploaded.filename !== '' 
     );
   };
 
@@ -91,7 +112,7 @@ const AddTransaction = ({updateTableDataAfterAddNewTransaction}) => {
                     <Flex direction="column" gap="3">
                         <label>
                             <Text as="div" size="2" mb="1" weight="bold">
-                            Name*
+                            Name
                             </Text>
                             <TextField.Input
                                 placeholder="Enter transaction name"
@@ -104,7 +125,7 @@ const AddTransaction = ({updateTableDataAfterAddNewTransaction}) => {
 
                         <label>
                             <Text as="div" size="2" mb="1" weight="bold">
-                            Description*
+                            Description
                             </Text>
                             <TextArea 
                                 placeholder="Enter transaction description" 
@@ -116,7 +137,7 @@ const AddTransaction = ({updateTableDataAfterAddNewTransaction}) => {
 
                         <label>
                             <Text as="div" size="2" mb="1" weight="bold">
-                            Total Amount*
+                            Total Amount
                             </Text>
                             <TextField.Input
                                 placeholder="Enter amount"
@@ -193,6 +214,21 @@ const AddTransaction = ({updateTableDataAfterAddNewTransaction}) => {
                             </Flex>
                             </Text>
                         </label>
+
+                         {/* ====================== */}
+                        <label>
+                            <Text as="div" size="2" mb="1" weight="bold">
+                            Receipt Photo
+                            </Text>
+                            <UploadDropzone options={options}
+                                onUpdate={({ uploadedFiles }) => {
+                                    let uploadedFile= (uploadedFiles.map(x => ({ "ext_direct_link": x.fileUrl, "filename": x.originalFile.originalFileName})))
+                                    setFormData((prevData) => ({ ...prevData, file_uploaded: uploadedFile[0] }));
+                                }}
+                                width="400x"
+                                height="150px" />
+                        </label>
+                        {/* ====================== */}
                     
                     </Flex>
 

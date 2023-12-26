@@ -3,7 +3,7 @@
 import { Badge, Box, Button, Card, Container, Flex, Grid, Link, Separator, Text } from '@radix-ui/themes';
 import CountUp from 'react-countup';
 import { GoArrowUpRight } from "react-icons/go";
-import { GrDocumentPdf } from "react-icons/gr";
+import { BsFiletypeJpg } from "react-icons/bs";
 import TransactionTable from "../components/TransactionTable";
 import { useState, useEffect } from 'react';
 import axios from 'axios'
@@ -82,18 +82,16 @@ const HomeCard = () => {
                             </Flex>
 
                             <Separator my="3" size="4" />
-                            { console.log(fileUploadedList)}
-
                             {(fileUploadedList).map(receipt => (
                                 <Box key={receipt.id} as="div"  size="2" className='mb-2'>
                                     <Flex align={'center'}>
-                                        <GrDocumentPdf
+                                        <BsFiletypeJpg
                                             size={35}
-                                            color={'red'} 
+                                            color={'gray'} 
                                             className='items-center mr-2'
                                         />
                                         <Box>
-                                            <Text  as="div"  size="2" className='font-medium'>{receipt.filename + '.' + receipt.file_ext}</Text>
+                                            <Text  as="div"  size="2" className='font-medium'>{receipt.filename + '.' + receipt.file_ext}  </Text>
                                             <Badge color="green" className='' size='1'>Uploaded</Badge>
                                         </Box>
                                     </Flex>
