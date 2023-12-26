@@ -5,7 +5,7 @@ Just to test new UI component by RadixUI
 ## Tech Stack Used
 UI Framework- NextJS, Tailwind CSS<br>
 UI Component Library - RadixUI, React Hot Toast, React Icons<br>
-Backend - NodeJS, PostgreSQL Supabase, Sequelieze ORM
+Backend - NodeJS, PostgreSQL Supabase, Sequelieze ORM, ByteScale
 
 Note: Still in development phase both UI and backend.
 
