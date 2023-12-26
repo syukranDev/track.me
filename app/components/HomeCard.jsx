@@ -8,30 +8,21 @@ import TransactionTable from "../components/TransactionTable";
 import { useState, useEffect } from 'react';
 import axios from 'axios'
 import Announcement from '../components/Announcement'
-const fileUploadedList = [
-    {
-        id: 1,
-        name : 'resit_breakfast.pdf'
-    },
-    {
-        id: 2,
-        name : 'bayar_saman.pdf'
-    },
-    {
-        id: 3,
-        name : 'dinner.pdf'
-    },
-]
-
 
 const HomeCard = () => {
     const [data, setData] = useState([])
+    const [dashbordData, setDashboardData] = useState({})
+    const [fileUploadedList, setFileUploadedList] = useState([])
     
     useEffect(() => {
             const fetchData = async () => {
                 try {
                     const response = await axios.get('http://localhost:3003/api/transaction/list?page=1&limit_rows=4'); // Replace with your API endpoint
                     setData(response.data.data.rows)
+
+                    const response2 = await axios.get('http://localhost:3003/api/transaction/dashboard'); // Replace with your API endpoint
+                    setDashboardData(response2.data.dashboard)
+                    setFileUploadedList(response2.data.dashboard.receipts)
                 } catch (error) {
                     console.error('Error fetching data:', error);
                 }
@@ -47,7 +38,7 @@ const HomeCard = () => {
             </Box>
             <Grid columns={{initial: "1", md: "3"}} width="auto" gap="5">
                 <Box>
-                    <Card className='shadow-sm transition duration-700 ease-out hover:border-gray-600 hover:shadow-md' gap={3}  style={{ height: '100%' }}>
+                    <Card className='shadow-sm transition duration-700 ease-out hover:border-gray-600 hover:shadow-md' gap={3} style={{ height: '100%' }}>
                         <a href="#">
                             <Flex align={'center'} justify={'between'} className='mb-3'>
                                 <Text size="3" weight="medium">Total Spendings</Text>
@@ -55,7 +46,7 @@ const HomeCard = () => {
                             </Flex>
                             <Text as="div" size="8">
                                 <span>RM
-                                    <CountUp start={3450} end={4523} duration={1} className='pl-2' />
+                                    <CountUp decimals={2} decimal="." start={dashbordData.total_spending - 10} end={dashbordData.total_spending} duration={1} className='pl-2' />
                                     <Badge color="green" className='ml-2'>+32%</Badge>
                                 </span>
                             </Text>
@@ -73,7 +64,7 @@ const HomeCard = () => {
                             </Flex>
                             <Text as="div" size="8">
                                 <span>
-                                    <CountUp start={100} end={145} duration={1} className='' />
+                                    <CountUp start={1} end={dashbordData.total_transactions} duration={1} className='' />
                                     <Badge color="green" className='ml-2'>+2%</Badge>
                                 </span>
                             </Text>
@@ -87,13 +78,14 @@ const HomeCard = () => {
                     <Card className='shadow-sm transition duration-700 ease-out hover:border-gray-600 hover:shadow-md' gap={3} >
                         <a href="#">
                             <Flex align='center' justify={'between'} className='mb-3'>
-                                <Text size="3" weight="medium">Recent Receipts (3)</Text>
+                                <Text size="3" weight="medium">Recent Receipts ({fileUploadedList.length})</Text>
                             </Flex>
 
                             <Separator my="3" size="4" />
+                            { console.log(fileUploadedList)}
 
-                            {fileUploadedList.map(resit => (
-                                <Box key={resit.id} as="div"  size="2" className='mb-2'>
+                            {(fileUploadedList).map(receipt => (
+                                <Box key={receipt.id} as="div"  size="2" className='mb-2'>
                                     <Flex align={'center'}>
                                         <GrDocumentPdf
                                             size={35}
@@ -101,7 +93,7 @@ const HomeCard = () => {
                                             className='items-center mr-2'
                                         />
                                         <Box>
-                                            <Text  as="div"  size="2" className='font-medium'>{resit.name}</Text>
+                                            <Text  as="div"  size="2" className='font-medium'>{receipt.filename + '.' + receipt.file_ext}</Text>
                                             <Badge color="green" className='' size='1'>Uploaded</Badge>
                                         </Box>
                                     </Flex>
@@ -124,7 +116,7 @@ const HomeCard = () => {
                             </Flex>
                             <Text as="div" size="8">
                                 <span>RM
-                                    <CountUp start={100} end={145} duration={1} className='' />
+                                    <CountUp decimals={2} decimal="." start={dashbordData.average_spending - 10} end={dashbordData.average_spending} duration={1} className='' />
                                     <Badge color="green" className='ml-2'>+2%</Badge>
                                 </span>
                             </Text>
@@ -148,7 +140,7 @@ const HomeCard = () => {
                             </Flex>
                             <Text as="div" size="8">
                                 <span>RM
-                                    <CountUp start={100} end={32} duration={1} className='' />
+                                    <CountUp decimals={2} decimal="." start={dashbordData.total_in_debt - 10} end={dashbordData.total_in_debt}  duration={1} className='' />
                                     <Badge color="red" className='ml-2'>-4%</Badge>
                                 </span>
                             </Text>
