@@ -90,7 +90,7 @@ const HomeCard = () => {
                                         className='items-center mr-2'
                                     />
                                     <Box>
-                                        <Link target='_blank' href={receipt.alt_direct_link}><Text  as="div"  size="2" className='font-medium'>{receipt.filename + '.' + receipt.file_ext}</Text></Link>
+                                        <Link target='_blank' href={receipt.alt_direct_link}><Text  as="div"  size="2" className='font-medium'>{receipt.filename}</Text></Link>
                                         <Badge color="green" className='' size='1'>Uploaded</Badge>
                                     </Box>
                                 </Flex>
