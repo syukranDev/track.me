@@ -5,7 +5,6 @@ import UserLoggedIn from './components/UserLoggedIn'
 import { Container } from '@radix-ui/themes'
 import { motion } from "framer-motion"
 
-
 export default function Home() {
   return (
     <Container className='m-8'>

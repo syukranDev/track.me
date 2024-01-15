@@ -8,6 +8,7 @@ const dayjs = require('dayjs');
 const today = dayjs().format('YYYY-MM-DD');
 
 router.get('/list', async (req, res) => {
+    let { user_id } = req.query;
     let page = req.query.page;
     let limitRows = req.query.limit_rows;
 
@@ -16,6 +17,7 @@ router.get('/list', async (req, res) => {
     let offset = page * limitRows;
 
     const data = await db.transactions.findAndCountAll({
+      where:{ assignedToUserId: {[Op.eq]: user_id} },
       order: [['createdAt', 'DESC']],
       offset, limit: limitRows, 
       raw: true,
@@ -36,7 +38,7 @@ router.post('/add', async (req, res) => {
       total_amt, 
       status, 
       upload_date, 
-      assignedToUserId,
+      user_id,
       name, 
       categories,
       file_uploaded
@@ -48,7 +50,7 @@ router.post('/add', async (req, res) => {
     if (!total_amt) return res.status(422).send({errMsg: 'Missing total_amt'})
     // if (!status) return res.status(422).send({errMsg: 'Missing status'})
     // if (!upload_date) return res.status(422).send({errMsg: 'Missing upload_date'})
-    // if (!assignedToUserId) return res.status(422).send({errMsg: 'Missing assignedToUserId'})
+    if (!user_id) return res.status(422).send({errMsg: 'Missing assignedToUserId'})
     if (!name) return res.status(422).send({errMsg: 'Missing name'})
     if (!categories) return res.status(422).send({errMsg: 'Missing categories'})
     if (!file_uploaded) return res.status(422).send({errMsg: 'Missing alt_direct_link'})
@@ -65,7 +67,7 @@ router.post('/add', async (req, res) => {
           "payment_method": payment_method,
           "status": status == false ? 'settled' : 'in debt',
           "upload_date": upload_date || today,
-          "assignedToUserId": assignedToUserId || 'poweruser'
+          "assignedToUserId": user_id ? user_id : 'system'
       });
 
       await db.receipts.create({
@@ -73,7 +75,7 @@ router.post('/add', async (req, res) => {
           "transaction_id": transactions_uuid,
           "filename": file_uploaded.filename || '', 
           "image": Buffer.alloc(0), //empty for now
-          "assignedToUserId": assignedToUserId || 'poweruser',
+          "assignedToUserId": user_id ? user_id : 'system' || 'system',
           "file_ext": 'jpg',
           "alt_direct_link": file_uploaded.ext_direct_link || '' ,
       });
@@ -118,22 +120,28 @@ router.get('/delete/:id', async (req, res) => {
 })
 
 router.get('/dashboard', async (req, res) => {
+  let { user_id } = req.query
   let data;
   let dashboard = {}
 
   try {
     data = await db.transactions.findAndCountAll({
+      where:{ assignedToUserId: {[Op.eq]: user_id} },
       raw: true,
       logging: console.log
     });
 
     in_debt_data = await db.transactions.findAndCountAll({
-      where: { status: 'in debt' },
+      where: { 
+        status: 'in debt',
+        assignedToUserId: {[Op.eq]: user_id }
+      },
       raw: true,
       logging: console.log
     });
 
     receipt_data = await db.receipts.findAndCountAll({
+      where:{ assignedToUserId: {[Op.eq]: user_id} },
       order: [['createdAt', 'DESC']],
       limit: 3,
       raw: true,

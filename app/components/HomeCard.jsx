@@ -8,28 +8,38 @@ import TransactionTable from "../components/TransactionTable";
 import { useState, useEffect } from 'react';
 import axios from 'axios'
 import Announcement from '../components/Announcement'
+import { useAuth } from '@clerk/nextjs';
 
 const HomeCard = () => {
     const [data, setData] = useState([])
     const [dashbordData, setDashboardData] = useState({})
     const [fileUploadedList, setFileUploadedList] = useState([])
+
     
+    const { isLoaded, userId, sessionId, getToken } = useAuth();
+
     useEffect(() => {
+            if (!userId) {
+            console.log("Unauthorized")
+            } else console.log({ userId , message: 'Authorized'})
+        
             const fetchData = async () => {
                 try {
-                    const response = await axios.get('http://localhost:3003/api/transaction/list?page=1&limit_rows=4'); // Replace with your API endpoint
+                    const response = await axios.get(`http://localhost:3003/api/transaction/list?page=1&limit_rows=4&user_id=${userId}`); // Replace with your API endpoint
                     setData(response.data.data.rows)
 
-                    const response2 = await axios.get('http://localhost:3003/api/transaction/dashboard'); // Replace with your API endpoint
+                    const response2 = await axios.get(`http://localhost:3003/api/transaction/dashboard?user_id=${userId}`); // Replace with your API endpoint
                     setDashboardData(response2.data.dashboard)
                     setFileUploadedList(response2.data.dashboard.receipts)
+                    console.log('=======')
+                    console.log(response2.data.dashboard.receipts)
                 } catch (error) {
                     console.error('Error fetching data:', error);
                 }
             };
     
             fetchData();
-        }, []);
+        }, [userId]);
 
     return (
         <>
@@ -77,7 +87,7 @@ const HomeCard = () => {
                 <Box height={{initial: "", md: "3"}}>
                     <Card className='shadow-sm transition duration-700 ease-out hover:border-gray-600 hover:shadow-md' gap={3} >
                         <Flex align='center' justify={'between'} className='mb-3'>
-                            <Text size="3" weight="medium">Recent Receipts ({fileUploadedList.length})</Text>
+                            <Text size="3" weight="medium">Recent Receipts</Text>
                         </Flex>
 
                         <Separator my="3" size="4" />

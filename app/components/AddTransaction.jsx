@@ -24,7 +24,7 @@ const options = {
   }
 };
 
-const AddTransaction = ({updateTableDataAfterAddNewTransaction}) => {
+const AddTransaction = ({updateTableDataAfterAddNewTransaction, userId}) => {
     const initialFormData = {
         name: '',
         desc: '',
@@ -33,6 +33,7 @@ const AddTransaction = ({updateTableDataAfterAddNewTransaction}) => {
         categories: '',
         payment_method: '',
         status: false,
+        user_id: userId,
         file_uploaded: { ext_direct_link: '', filename: ''}
     }
     
@@ -68,7 +69,8 @@ const AddTransaction = ({updateTableDataAfterAddNewTransaction}) => {
       formData.desc.trim() !== '' &&
       formData.total_amt.trim() !== '' &&
       formData.categories !== '' &&
-      formData.payment_method !== '' 
+      formData.payment_method !== '' &&
+      formData.user_id == userId
     //   formData.file_uploaded.ext_direct_link !== '' &&
     //   formData.file_uploaded.filename !== '' 
     );

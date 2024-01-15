@@ -6,9 +6,11 @@ import TransactionTable from '../components/TransactionTable'
 import AddTransaction from '../components/AddTransaction'
 import TablePagination from '../components/TablePagination'
 import axios from 'axios'
+import { useAuth } from '@clerk/nextjs';
 import { useSearchParams } from 'next/navigation'
 
 const page = () => {
+    const { isLoaded, userId, sessionId, getToken } = useAuth();
     const [data, setData] = useState([])
     const [dataCount, setDataCount] = useState(0)
 
@@ -25,7 +27,7 @@ const page = () => {
             
         try {
             console.log(`is this running`)
-            let response = await axios.get(`http://localhost:3003/api/transaction/list?page=${page}`); // Replace with your API endpoint
+            let response = await axios.get(`http://localhost:3003/api/transaction/list?page=${page}&user_id=${userId}`); // Replace with your API endpoint
             // console.log(response.data.data.rows)
             setData(response.data.data.rows)
             setDataCount(response.data.data.count)
@@ -34,11 +36,11 @@ const page = () => {
         }
         };
         fetchData();
-    }, []);
+    }, [userId]);
 
     const updateTableDataAfterAddNewTransaction = async () => {
         try {
-            const response = await axios.get('http://localhost:3003/api/transaction/list?page=1');
+            const response = await axios.get('http://localhost:3003/api/transaction/list?page=1&user_id=${userId}');
             setData(response.data.data.rows);
         } catch (error) {
             console.error('Error fetching updated data:', error);
@@ -47,7 +49,7 @@ const page = () => {
 
     const updateTableDataForBackPagination = async () => {
         try {
-            const response = await axios.get(`http://localhost:3003/api/transaction/list?page=`+ (parseInt(page)-1).toString() ); 
+            const response = await axios.get(`http://localhost:3003/api/transaction/list?user_id=${userId}&page=`+ (parseInt(page)-1).toString() ); 
             setData(response.data.data.rows);
         } catch (error) {
             console.error('Error fetching next page data:', error);
@@ -56,7 +58,7 @@ const page = () => {
 
     const updateTableDataForForwardPagination = async () => {
         try {
-            const response = await axios.get(`http://localhost:3003/api/transaction/list?page=`+ (parseInt(page)+1).toString()); 
+            const response = await axios.get(`http://localhost:3003/api/transaction/list?user_id=${userId}&page=`+ (parseInt(page)+1).toString()); 
             setData(response.data.data.rows);
         } catch (error) {
             console.error('Error fetching next page data:', error);
@@ -69,22 +71,30 @@ const page = () => {
             <Box>
                 <Flex align="center" justify="between" className="mb-5">
                     <Text>Transactions List</Text>
-                    <AddTransaction updateTableDataAfterAddNewTransaction={updateTableDataAfterAddNewTransaction}/>
+                    <AddTransaction updateTableDataAfterAddNewTransaction={updateTableDataAfterAddNewTransaction} userId={userId}/>
 
                 </Flex>
 
-                <TransactionTable contents={data} isDelete={true}/>
+                {
+                   (dataCount < 1) ? (<Text size={"3"}>No transactions found. Please initiate a new transaction.</Text>) 
+                   : (
+                    <>
+                        <TransactionTable contents={data} isDelete={true}/>
 
-                <Flex justify="between">
-                    <Text></Text>
-                    <TablePagination 
-                            pageSize={pageSize}
-                            itemCount={dataCount}
-                            currentPage={page}
-                            updateTableDataForBackPagination={updateTableDataForBackPagination}
-                            updateTableDataForForwardPagination={updateTableDataForForwardPagination}
-                    />
-                </Flex>
+                        <Flex justify="between">
+                            <Text></Text>
+                            <TablePagination 
+                                    pageSize={pageSize}
+                                    itemCount={dataCount}
+                                    currentPage={page}
+                                    updateTableDataForBackPagination={updateTableDataForBackPagination}
+                                    updateTableDataForForwardPagination={updateTableDataForForwardPagination}
+                            />
+                        </Flex>
+                    </>
+                   )
+                }
+
 
 
                 

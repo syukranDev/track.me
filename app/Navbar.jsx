@@ -7,6 +7,7 @@ import Image from 'next/image';
 import logoApps from '../public/logo-wallet.svg';
 import { ChevronLeftIcon, ChevronRightIcon, DoubleArrowLeftIcon, DoubleArrowRightIcon } from '@radix-ui/react-icons'
 import { MdOutlineSupportAgent } from "react-icons/md";
+import { UserButton } from "@clerk/nextjs";
 
 const Navbar = ({children}) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -120,28 +121,25 @@ const Navbar = ({children}) => {
                 href="#"
                 className="block py-2.5 px-4 font-medium rounded transition duration-200 text-gray-600 hover:bg-gray-100 hover:text-black"
               >
-                My Card
+                My Card (TBA)
               </Link>
 
               {/* Add other nav links */}
-              <Box className='mt-6'>
-                <Text className='font-medium text-xs text-gray-400 p-3'>OTHER</Text>
+              <Box className='mt-12'>
+                <Text className='font-medium text-xs text-gray-400 p-3'>PROFILE</Text>
               </Box>
-              <Link
-                href="/"
-                className="block py-2.5 px-4 font-medium rounded transition duration-200 text-gray-600 hover:bg-gray-100 hover:text-black"
+              <Box
+                className="block py-2.5 px-4 font-medium"
               >
-                <Flex justify={"between"} align={"center"}> 
-                  Settings
-                  <ChevronRightIcon/>
+                <Flex align={"center"} gap={"3"}>
+                  <Box>
+                    <UserButton afterSignOutUrl="/"/>
+                  </Box>
+                  <Box>
+                    {/* Logout */}
+                  </Box>
                 </Flex>
-              </Link>
-              <Link
-                href="/"
-                className="block py-2.5 px-4 font-medium rounded transition duration-200 text-gray-600 hover:bg-gray-100 hover:text-black"
-              >
-                Logout
-              </Link>
+              </Box>
             </Box>
 
             {/* remove this due to hydration fail

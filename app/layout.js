@@ -3,6 +3,7 @@ import '@radix-ui/themes/styles.css';
 import './globals.css'
 import { Container, Theme, ThemePanel } from '@radix-ui/themes';
 import Navbar from './Navbar';
+import { ClerkProvider } from '@clerk/nextjs'
 
 
 const inter = Inter({ 
@@ -17,18 +18,20 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={inter.variable}>
-        <Theme appearance="light" accentColor="violet" radius="large">
-          <Navbar children={children}/>
-          {/* <main className='p-5'> */}
-            {/* <Container> */}
-              {/* {children} */}
-            {/* </Container> */}
-          {/* </main> */}
-          {/* <ThemePanel/> */}
-        </Theme>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className={inter.variable}>
+          <Theme appearance="light" accentColor="violet" radius="large">
+            <Navbar children={children}/>
+            {/* <main className='p-5'> */}
+              {/* <Container> */}
+                {/* {children} */}
+              {/* </Container> */}
+            {/* </main> */}
+            {/* <ThemePanel/> */}
+          </Theme>
+        </body>
+      </html>
+    </ClerkProvider>
   )
 }
