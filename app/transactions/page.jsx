@@ -1,7 +1,6 @@
 'use client'
 
 import React, {useEffect, useState} from 'react'
-import '@radix-ui/themes/styles.css';
 import {Box, Text, Flex, Button, Container} from "@radix-ui/themes"
 import TransactionTable from '../components/TransactionTable'
 import AddTransaction from '../components/AddTransaction'
