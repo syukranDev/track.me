@@ -52,7 +52,7 @@ const HomeCard = () => {
                         <a href="#">
                             <Flex align={'center'} justify={'between'} className='mb-3'>
                                 <Text size="3" weight="medium">Total Spendings</Text>
-                                <Button><a href='/transactions'>Quick Add</a></Button>
+                                {/* <Button>Quick Add</Button> */}
                             </Flex>
                             <Text as="div" size="8">
                                 <span>RM
