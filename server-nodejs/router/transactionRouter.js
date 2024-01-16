@@ -3,6 +3,7 @@ const router  = express.Router();
 const { uuid } = require('uuidv4');
 const db = require('../model/db.js');
 const Op = db.Sequelize.Op;
+const sq = db.sequelize;
 const limit = 5
 const dayjs = require('dayjs'); 
 const today = dayjs().format('YYYY-MM-DD');
@@ -69,16 +70,18 @@ router.post('/add', async (req, res) => {
           "upload_date": upload_date || today,
           "assignedToUserId": user_id ? user_id : 'system'
       });
-
-      await db.receipts.create({
-          "id": uuid(),
-          "transaction_id": transactions_uuid,
-          "filename": file_uploaded.filename || '', 
-          "image": Buffer.alloc(0), //empty for now
-          "assignedToUserId": user_id ? user_id : 'system' || 'system',
-          "file_ext": 'jpg',
-          "alt_direct_link": file_uploaded.ext_direct_link || '' ,
-      });
+      
+      if(file_uploaded.ext_direct_link)  {
+        await db.receipts.create({
+            "id": uuid(),
+            "transaction_id": transactions_uuid,
+            "filename": file_uploaded.filename || '', 
+            "image": Buffer.alloc(0), //empty for now
+            "assignedToUserId": user_id ? user_id : 'system' || 'system',
+            "file_ext": 'jpg',
+            "alt_direct_link": file_uploaded.ext_direct_link || '' ,
+        });
+      }
 
     } catch (err){
       console.error(err)
@@ -98,6 +101,9 @@ router.get('/delete/:id', async (req, res) => {
     if (!id) return res.status(422).send({errMsg: 'Missing id'})
 
     try {
+      let transaction;
+      transaction = await sq.transaction();
+
       isRowExist = await db.transactions.findAll({
         where: {id}
       })
@@ -105,12 +111,20 @@ router.get('/delete/:id', async (req, res) => {
       if (isRowExist.length < 1) return res.status(422).send({errMsg: 'ID provided not exist.'})
 
       await db.transactions.destroy({
-        where: { id }
+        where: { id },
+        transaction
+      });
+
+      await db.receipts.destroy({
+        where: { transaction_id: id },
+        transaction
       });
       
+      await transaction.commit();
     } catch (err){
-      console.error(err)
-      return res.status(500).send({errMsg: 'Failed to delete transaction'})
+        if(transaction) await transaction.rollback();
+        console.error(err)
+        return res.status(500).send({errMsg: 'Failed to delete transaction'})
     }
 
     return res.send({

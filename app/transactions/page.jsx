@@ -40,7 +40,7 @@ const page = () => {
 
     const updateTableDataAfterAddNewTransaction = async () => {
         try {
-            const response = await axios.get('http://localhost:3003/api/transaction/list?page=1&user_id=${userId}');
+            const response = await axios.get(`http://localhost:3003/api/transaction/list?page=1&user_id=${userId}`);
             setData(response.data.data.rows);
         } catch (error) {
             console.error('Error fetching updated data:', error);
@@ -76,7 +76,7 @@ const page = () => {
                 </Flex>
 
                 {
-                   (dataCount < 1) ? (<Text size={"3"}>No transactions found. Please initiate a new transaction.</Text>) 
+                   (dataCount < 1) ? (<Text as="div" color="gray" size="2">No transactions found. Please initiate a new transaction.</Text>) 
                    : (
                     <>
                         <TransactionTable contents={data} isDelete={true}/>

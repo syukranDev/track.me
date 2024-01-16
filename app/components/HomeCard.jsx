@@ -91,21 +91,31 @@ const HomeCard = () => {
                         </Flex>
 
                         <Separator my="3" size="4" />
-                        {(fileUploadedList).map(receipt => (
-                            <Box key={receipt.id} as="div"  size="2" className='mb-2'>
-                                <Flex align={'center'}>
-                                    <BsFiletypeJpg
-                                        size={35}
-                                        color={'gray'} 
-                                        className='items-center mr-2'
-                                    />
-                                    <Box>
-                                        <Link target='_blank' href={receipt.alt_direct_link}><Text  as="div"  size="2" className='font-medium'>{receipt.filename}</Text></Link>
-                                        <Badge color="green" className='' size='1'>Uploaded</Badge>
+                        {console.log(fileUploadedList)}
+                        { 
+                            fileUploadedList.length == 0 ? 
+                            (
+                                <Text as="div" color="gray" size="2">No recent receipts found.</Text>
+                            ) :
+                            (
+                                (fileUploadedList).map(receipt => (
+                                    <Box key={receipt.id} as="div"  size="2" className='mb-2'>
+                                        <Flex align={'center'}>
+                                            <BsFiletypeJpg
+                                                size={35}
+                                                color={'gray'} 
+                                                className='items-center mr-2'
+                                            />
+                                            <Box>
+                                                <Link target='_blank' href={receipt.alt_direct_link}><Text  as="div"  size="2" className='font-medium'>{receipt?.filename}</Text></Link>
+                                                <Badge color="green" className='' size='1'>Uploaded</Badge>
+                                            </Box>
+                                        </Flex>
                                     </Box>
-                                </Flex>
-                            </Box>
-                        ))}
+                                ))
+                            )
+                        }
+                        
                     </Card>
                 </Box>
                 <Box>
@@ -169,7 +179,15 @@ const HomeCard = () => {
                         </Link>
                     </Flex>
                     
-                    <TransactionTable contents={data}/>
+                    {
+                        data.length == 0 ? 
+                        (
+                            <Text as="div" color="gray" size="2">No transactions found. Please initiate a new transaction.</Text>
+                        ) :
+                        (
+                            <TransactionTable contents={data}/>
+                        )
+                    }
             </Box>
         </>
     )
