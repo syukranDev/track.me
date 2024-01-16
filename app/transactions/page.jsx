@@ -8,7 +8,8 @@ import TablePagination from '../components/TablePagination'
 import axios from 'axios'
 import { useAuth } from '@clerk/nextjs';
 import { useSearchParams } from 'next/navigation'
-// import '@radix-ui/themes/styles.css';
+import '../../app/copyRadix.css';
+
 
 const page = () => {
     const { isLoaded, userId, sessionId, getToken } = useAuth();
