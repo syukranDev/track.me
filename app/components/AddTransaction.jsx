@@ -102,11 +102,11 @@ const AddTransaction = ({updateTableDataAfterAddNewTransaction, userId}) => {
         <>
             <Dialog.Root>
                 <Dialog.Trigger>
-                    <Button disabled={isSubmitting}>Add Transaction{isSubmitting && <Spinner/>}</Button>
+                    <Button disabled={isSubmitting} id='btnAddTransaction'>Add Transaction{isSubmitting && <Spinner/>}</Button>
                 </Dialog.Trigger>
 
                 <Dialog.Content style={{ maxWidth: 450 }}>
-                    <Dialog.Title>Add Transaction</Dialog.Title>
+                    <Dialog.Title >Add Transaction</Dialog.Title>
                     <Dialog.Description size="2" mb="4">
                     Note down you transaction today.
                     </Dialog.Description>

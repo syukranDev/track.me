@@ -4,6 +4,10 @@
 
 @import '@radix-ui/themes/styles.css';
 
+#btnAddTransaction {
+  background-color: var(--accent-9)
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
