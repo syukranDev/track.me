@@ -1,6 +1,6 @@
 import { Inter } from 'next/font/google'
 import './globals.css'
-import '@radix-ui/themes/styles.css';
+// import '@radix-ui/themes/styles.css';
 import { Container, Theme, ThemePanel } from '@radix-ui/themes';
 import Navbar from './Navbar';
 import { ClerkProvider } from '@clerk/nextjs'
