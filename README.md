@@ -11,6 +11,4 @@ Note: This project is currently in the development phase with known bugs, with o
 
 <img width="998" alt="image" src="https://github.com/syukranDev/track.me/assets/51852197/7af3afba-6702-496d-bd0c-e5251994a731">
 
-<br></br>
-Below is GIF
-![gif_trackme-ezgif com-animated-gif-maker (2)](https://github.com/syukranDev/track.me/assets/51852197/953af102-f251-458c-82dc-6aadc636da1a)
+<img width="972" alt="new" src="https://github.com/syukranDev/track.me/assets/51852197/29b8a801-7675-432d-b918-3d9fdb90650d">
